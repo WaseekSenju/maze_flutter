@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'maze_painter.dart';
 import 'models/item.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:developer' as dev;
 
 ///Maze
 ///
@@ -160,6 +161,12 @@ class _MazeState extends State<Maze> {
                             _mazePainter.cells.first.length,
                         itemBuilder: (BuildContext context, int index) {
                           var cell = _mazePainter.cellList.elementAt(index);
+                          // dev.log(
+                          //   '(${cell.row},${cell.col})',
+                          // );
+                          // dev.log(
+                          //   'N:${cell.topWall},W:${cell.leftWall},S:${cell.bottomWall},E:${cell.rightWall}',
+                          // );
 
                           // var cell = _mazePainter.cells
                           //     .elementAt(row)
@@ -167,21 +174,21 @@ class _MazeState extends State<Maze> {
 
                           return Container(
                             decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border: 
-                              Border(
-                                bottom:  border ,
-                                right:  border ,
-                                top: border ,
-                                left:  border ,
+                              color: cell.visited
+                                  ? Colors.red
+                                  : Colors.transparent,
+                              border: Border(
+                                bottom: cell.bottomWall ? border : noBorder,
+                                right: cell.rightWall ? border : noBorder,
+                                top: cell.topWall ? border : noBorder,
+                                left: cell.leftWall ? border : noBorder,
                               ),
-                              
-                              
+
                               // Border(
-                              //   bottom: cell.bottomWall ? border : noBorder,
-                              //   right: cell.rightWall ? border : noBorder,
-                              //   top: cell.topWall ? border : noBorder,
-                              //   left: cell.leftWall ? border : noBorder,
+                              //   bottom:  border ,
+                              //   right:  border ,
+                              //   top: border ,
+                              //   left:  border ,
                               // ),
                             ),
                             height: 1,
@@ -203,38 +210,51 @@ class _MazeState extends State<Maze> {
                           );
                         }),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              crossAxixCount++;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.add_circle,
-                            color: Colors.purple,
-                          )),
-                      Text(
-                        '$crossAxixCount',
-                        style: GoogleFonts.orbitron(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple,
-                          fontSize: 15,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            crossAxixCount--;
-                          });
-                        },
-                        icon: const Icon(Icons.remove_circle),
-                        color: Colors.purple,
-                      ),
-                    ],
+
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _mazePainter.depthFirstSearch();
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.add_circle,
+                      color: Colors.purple,
+                    ),
                   ),
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     IconButton(
+                  //         onPressed: () {
+                  //           setState(() {
+                  //             crossAxixCount++;
+                  //           });
+                  //         },
+                  //         icon: const Icon(
+                  //           Icons.add_circle,
+                  //           color: Colors.purple,
+                  //         )),
+                  //     Text(
+                  //       '$crossAxixCount',
+                  //       style: GoogleFonts.orbitron(
+                  //         fontWeight: FontWeight.bold,
+                  //         color: Colors.purple,
+                  //         fontSize: 15,
+                  //       ),
+                  //     ),
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           crossAxixCount--;
+                  //         });
+                  //       },
+                  //       icon: const Icon(Icons.remove_circle),
+                  //       color: Colors.purple,
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

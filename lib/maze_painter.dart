@@ -37,8 +37,6 @@ class MazePainter {
     this.wallColor = Colors.black,
     this.wallThickness = 4.0,
   }) {
-
-
     _checkpoints = List.from(checkpointsImages);
     _checkpointsPositions = _checkpoints
         .map((i) => ItemPosition(
@@ -89,7 +87,6 @@ class MazePainter {
   ///Randomizer for positions and walls distribution
   final Random _randomizer = Random();
 
-
   ///This method initialize the maze by randomizing what wall will be disable
   void _createMaze() {
     var stack = Stack<Cell>();
@@ -97,7 +94,7 @@ class MazePainter {
     Cell? next;
 
     cells =
-        List.generate(columns, (c) => List.generate(rows, (r) => Cell(c, r)));
+        List.generate(rows, (r) => List.generate(columns, (c) => Cell(r, c)));
 
     _player = cells.first.first;
     _exit = cells.last.last;
@@ -118,46 +115,114 @@ class MazePainter {
 
     for (var i = 0; i < cells.length; i++) {
       for (var j = 0; j < cells[i].length; j++) {
-        cellList.add(cells[j][i]);
-        dev.log(
-          '(${cells[i][j].row},${cells[i][j].col})',
-        );
-        dev.log(
-          'N:${cells[i][j].topWall},W:${cells[i][j].leftWall},S:${cells[i][j].bottomWall},E:${cells[i][j].rightWall}',
-        );
+        cellList.add(cells[i][j]);
+        // dev.log(
+        //   '(${cells[i][j].row},${cells[i][j].col})',
+        // );
+        // dev.log(
+        //   'N:${cells[i][j].topWall},W:${cells[i][j].leftWall},S:${cells[i][j].bottomWall},E:${cells[i][j].rightWall}',
+        // );
       }
     }
+    //depthFirstSearch();
   }
 
+  void depthFirstSearch() {
+    var stack = Stack<Cell>();
+    stack.push(cells.first.first);
+
+    //making all cells unvisited for DFS
+    for (var rows in cells) {
+      for (var cell in rows) {
+        cell.visited = false;
+      }
+    }
+    
+
+    while (cells.last.last.visited != true) {
+      Cell current = stack.pop();
+      //-------Bottom
+      if (current.bottomWall == false &&
+          !cells[current.row + 1][current.col].visited) {
+        stack.push(cells[current.row + 1][current.col]);
+        cells[current.row + 1][current.col].visited = true;
+        dev.log(
+          '(${current.row},${current.col})',
+        );
+        dev.log(
+          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        );
+      }
+      //-------Right
+      else if (current.rightWall == false &&
+          !cells[current.row][current.col + 1].visited) {
+        stack.push(cells[current.row][current.col + 1]);
+        cells[current.row][current.col + 1].visited = true;
+        dev.log(
+          '(${current.row},${current.col})',
+        );
+        dev.log(
+          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        );
+      }
+      //-------Top
+      else if (current.topWall == false &&
+          !cells[current.row - 1][current.col].visited) {
+        stack.push(cells[current.row - 1][current.col]);
+        cells[current.row - 1][current.col].visited = true;
+        dev.log(
+          '(${current.row},${current.col})',
+        );
+        dev.log(
+          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        );
+      }
+      //-------Left
+      else if (current.leftWall == false &&
+          !cells[current.row][current.col - 1].visited) {
+        stack.push(cells[current.row][current.col - 1]);
+        cells[current.row][current.col - 1].visited = true;
+        dev.log(
+          '(${current.row},${current.col})',
+        );
+        dev.log(
+          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        );
+      }
+
+      
+    }
+  
+  }
 
   Cell? _getNext(Cell cell) {
     var neighbours = <Cell>[];
 
     //left
     if (cell.col > 0) {
-      if (!cells[cell.col - 1][cell.row].visited) {
-        neighbours.add(cells[cell.col - 1][cell.row]);
+      if (!cells[cell.row][cell.col - 1].visited) {
+        neighbours.add(cells[cell.row][cell.col - 1]);
       }
     }
 
     //right
     if (cell.col < columns - 1) {
-      if (!cells[cell.col + 1][cell.row].visited) {
-        neighbours.add(cells[cell.col + 1][cell.row]);
+      if (!cells[cell.row][cell.col + 1].visited) {
+        neighbours.add(cells[cell.row][cell.col + 1]);
       }
     }
 
     //Top
     if (cell.row > 0) {
-      if (!cells[cell.col][cell.row - 1].visited) {
-        neighbours.add(cells[cell.col][cell.row - 1]);
+      if (!cells[cell.row - 1][cell.col].visited) {
+        neighbours.add(cells[cell.row - 1][cell.col]);
       }
     }
 
     //Bottom
     if (cell.row < rows - 1) {
-      if (!cells[cell.col][cell.row + 1].visited) {
-        neighbours.add(cells[cell.col][cell.row + 1]);
+      if (!cells[cell.row + 1][cell.col].visited) {
+        neighbours.add(cells[cell.row + 1][cell.col]);
       }
     }
     if (neighbours.isNotEmpty) {
