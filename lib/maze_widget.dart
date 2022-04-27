@@ -22,13 +22,13 @@ class Maze extends StatefulWidget {
   Maze({
     required this.player,
     this.checkpoints = const [],
-    this.columns = 5,
+    this.columns = 7,
     this.finish,
     this.height,
     this.loadingWidget,
     this.onCheckpoint,
     this.onFinish,
-    this.rows = 5,
+    this.rows = 7,
     this.wallColor = Colors.black,
     this.wallThickness = 3.0,
     this.width,
@@ -193,15 +193,15 @@ class _MazeState extends State<Maze> {
                             ),
                             height: 1,
                             width: 1,
-                            // child: Center(
-                            //   child: Text(
-                            //     '$index',
-                            //     style: GoogleFonts.orbitron(
-                            //       color: Colors.white,
-                            //       fontSize: 12,
-                            //     ),
-                            //   ),
-                            // ),
+                            child: Center(
+                              child: Text(
+                                '(${cell.row},${cell.col})',
+                                style: GoogleFonts.orbitron(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
                             // child: const Icon(
                             //   Icons.fiber_manual_record,
                             //   color: Colors.purple,

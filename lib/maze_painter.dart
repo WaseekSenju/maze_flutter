@@ -137,11 +137,28 @@ class MazePainter {
         cell.visited = false;
       }
     }
-    
 
     while (cells.last.last.visited != true) {
       Cell current = stack.pop();
       //-------Bottom
+
+      // if (current.bottomWall == true &&
+      //     !cells[current.row + 1][current.col].visited &&
+      //     current.rightWall == true &&
+      //     !cells[current.row][current.col + 1].visited &&
+      //     current.topWall == true &&
+      //     !cells[current.row - 1][current.col].visited &&
+      //     current.leftWall == false &&
+      //     !cells[current.row][current.col - 1].visited) {
+      //   stack.pop();
+      //   dev.log('This is the phada node');
+      //   dev.log(
+      //     '(${current.row},${current.col})',
+      //   );
+      //   dev.log(
+      //     'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+      //   );
+      // }
       if (current.bottomWall == false &&
           !cells[current.row + 1][current.col].visited) {
         stack.push(cells[current.row + 1][current.col]);
@@ -170,6 +187,7 @@ class MazePainter {
           !cells[current.row - 1][current.col].visited) {
         stack.push(cells[current.row - 1][current.col]);
         cells[current.row - 1][current.col].visited = true;
+        dev.log('This is the phada node');
         dev.log(
           '(${current.row},${current.col})',
         );
@@ -188,11 +206,16 @@ class MazePainter {
         dev.log(
           'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
         );
+      } else {
+        stack.pop();
+        dev.log(
+          '(${current.row},${current.col})',
+        );
+        dev.log(
+          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        );
       }
-
-      
     }
-  
   }
 
   Cell? _getNext(Cell cell) {
