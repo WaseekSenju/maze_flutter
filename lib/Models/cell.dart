@@ -23,6 +23,8 @@ class Cell {
   ///The player has been passed in this cell?
   bool visited = false;
 
+  bool isGoal = false;
+  bool isBackTracked = false;
 
   ///Column position
   int col;

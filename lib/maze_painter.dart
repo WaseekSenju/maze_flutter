@@ -1,9 +1,10 @@
+import 'dart:collection';
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart' hide Stack;
-import 'models/cell.dart';
-import 'models/item_position.dart';
-import 'models/stack.dart';
+import 'Models/cell.dart';
+import 'Models/item_position.dart';
+import 'Models/stack.dart';
 import 'dart:developer' as dev;
 
 /// Direction movement
@@ -71,6 +72,7 @@ class MazePainter {
   Color wallColor;
 
   final List<Cell> cellList = [];
+  final List<Cell> path = [];
 
   ///Size of the walls
   final double wallThickness;
@@ -86,6 +88,10 @@ class MazePainter {
 
   ///Randomizer for positions and walls distribution
   final Random _randomizer = Random();
+  int goalx = 0;
+  int goaly = 0;
+
+  bool mazeSolved = false;
 
   ///This method initialize the maze by randomizing what wall will be disable
   void _createMaze() {
@@ -95,6 +101,13 @@ class MazePainter {
 
     cells =
         List.generate(rows, (r) => List.generate(columns, (c) => Cell(r, c)));
+
+    //------------ For Random Goals Node
+    //goalx = _randomizer.nextInt(rows);
+    // goaly = _randomizer.nextInt(columns);
+    //cells[goalx][goaly].isGoal = true;
+
+    cells.last.last.isGoal = true;
 
     _player = cells.first.first;
     _exit = cells.last.last;
@@ -112,7 +125,7 @@ class MazePainter {
         current = stack.pop();
       }
     } while (stack.isNotEmpty);
-
+    //cells[goalx][goaly].isGoal = true;
     for (var i = 0; i < cells.length; i++) {
       for (var j = 0; j < cells[i].length; j++) {
         cellList.add(cells[i][j]);
@@ -128,6 +141,7 @@ class MazePainter {
   }
 
   void depthFirstSearch() {
+    mazeSolved = true;
     var stack = Stack<Cell>();
     stack.push(cells.first.first);
 
@@ -138,83 +152,155 @@ class MazePainter {
       }
     }
 
-    while (cells.last.last.visited != true) {
+    while (cells[goalx][goaly].visited != true) {
       Cell current = stack.pop();
-      //-------Bottom
 
-      // if (current.bottomWall == true &&
-      //     !cells[current.row + 1][current.col].visited &&
-      //     current.rightWall == true &&
-      //     !cells[current.row][current.col + 1].visited &&
-      //     current.topWall == true &&
-      //     !cells[current.row - 1][current.col].visited &&
-      //     current.leftWall == false &&
-      //     !cells[current.row][current.col - 1].visited) {
-      //   stack.pop();
-      //   dev.log('This is the phada node');
-      //   dev.log(
-      //     '(${current.row},${current.col})',
-      //   );
-      //   dev.log(
-      //     'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
-      //   );
-      // }
+      //-------Bottom
       if (current.bottomWall == false &&
           !cells[current.row + 1][current.col].visited) {
         stack.push(cells[current.row + 1][current.col]);
         cells[current.row + 1][current.col].visited = true;
-        dev.log(
-          '(${current.row},${current.col})',
-        );
-        dev.log(
-          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
-        );
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
       }
       //-------Right
-      else if (current.rightWall == false &&
+      if (current.rightWall == false &&
           !cells[current.row][current.col + 1].visited) {
         stack.push(cells[current.row][current.col + 1]);
         cells[current.row][current.col + 1].visited = true;
-        dev.log(
-          '(${current.row},${current.col})',
-        );
-        dev.log(
-          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
-        );
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
       }
       //-------Top
-      else if (current.topWall == false &&
+      if (current.topWall == false &&
           !cells[current.row - 1][current.col].visited) {
         stack.push(cells[current.row - 1][current.col]);
         cells[current.row - 1][current.col].visited = true;
-        dev.log('This is the phada node');
-        dev.log(
-          '(${current.row},${current.col})',
-        );
-        dev.log(
-          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
-        );
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
       }
       //-------Left
-      else if (current.leftWall == false &&
+      if (current.leftWall == false &&
           !cells[current.row][current.col - 1].visited) {
         stack.push(cells[current.row][current.col - 1]);
         cells[current.row][current.col - 1].visited = true;
-        dev.log(
-          '(${current.row},${current.col})',
-        );
-        dev.log(
-          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
-        );
-      } else {
-        stack.pop();
-        dev.log(
-          '(${current.row},${current.col})',
-        );
-        dev.log(
-          'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
-        );
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
       }
+
+      // current.isBackTracked = true;
+    }
+    for (var rows in cells) {
+      for (var cell in rows) {
+        path.add(cell);
+      }
+    }
+    dev.log(' length of path is ${path.length}');
+    for (var current in path) {
+      dev.log(
+        '(${current.row},${current.col})',
+      );
+      dev.log(
+        'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+      );
+    }
+  }
+
+  void breathFirstSearch() {
+    mazeSolved = true;
+    var queue = Queue<Cell>();
+    queue.add(cells.first.first);
+    //making all cells unvisited for DFS
+    for (var rows in cells) {
+      for (var cell in rows) {
+        cell.visited = false;
+      }
+    }
+
+    while (
+
+        //cells[goalx][goaly].visited != true
+        cells.last.last.visited != true) {
+      Cell current = queue.removeFirst();
+
+      //-------Bottom
+      if (current.bottomWall == false &&
+          !cells[current.row + 1][current.col].visited) {
+        queue.add(cells[current.row + 1][current.col]);
+        cells[current.row + 1][current.col].visited = true;
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
+      }
+      //-------Right
+      if (current.rightWall == false &&
+          !cells[current.row][current.col + 1].visited) {
+        queue.add(cells[current.row][current.col + 1]);
+        cells[current.row][current.col + 1].visited = true;
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
+      }
+      //-------Top
+      if (current.topWall == false &&
+          !cells[current.row - 1][current.col].visited) {
+        queue.add(cells[current.row - 1][current.col]);
+        cells[current.row - 1][current.col].visited = true;
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
+      }
+      //-------Left
+      if (current.leftWall == false &&
+          !cells[current.row][current.col - 1].visited) {
+        queue.add(cells[current.row][current.col - 1]);
+        cells[current.row][current.col - 1].visited = true;
+        // dev.log(
+        //   '(${current.row},${current.col})',
+        // );
+        // dev.log(
+        //   'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+        // );
+      }
+    }
+    for (var rows in cells) {
+      for (var cell in rows) {
+        path.add(cell);
+      }
+    }
+    dev.log(' length of path is ${path.length}');
+    for (var current in path) {
+      dev.log(
+        '(${current.row},${current.col})',
+      );
+      dev.log(
+        'N:${current.topWall},W:${current.leftWall},S:${current.bottomWall},E:${current.rightWall}',
+      );
     }
   }
 

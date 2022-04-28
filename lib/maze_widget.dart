@@ -9,6 +9,7 @@ import 'maze_painter.dart';
 import 'models/item.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer' as dev;
+import 'Models/cell.dart';
 
 ///Maze
 ///
@@ -22,13 +23,13 @@ class Maze extends StatefulWidget {
   Maze({
     required this.player,
     this.checkpoints = const [],
-    this.columns = 7,
+    this.columns = 5,
     this.finish,
     this.height,
     this.loadingWidget,
     this.onCheckpoint,
     this.onFinish,
-    this.rows = 7,
+    this.rows = 5,
     this.wallColor = Colors.black,
     this.wallThickness = 3.0,
     this.width,
@@ -160,7 +161,8 @@ class _MazeState extends State<Maze> {
                         itemCount: _mazePainter.cells.first.length *
                             _mazePainter.cells.first.length,
                         itemBuilder: (BuildContext context, int index) {
-                          var cell = _mazePainter.cellList.elementAt(index);
+                          Cell cell = _mazePainter.cellList.elementAt(index);
+                          var color = '0xFF$index';
                           // dev.log(
                           //   '(${cell.row},${cell.col})',
                           // );
@@ -174,9 +176,18 @@ class _MazeState extends State<Maze> {
 
                           return Container(
                             decoration: BoxDecoration(
-                              color: cell.visited
-                                  ? Colors.red
-                                  : Colors.transparent,
+                              color: !_mazePainter.mazeSolved
+                                  ? cell.isGoal
+                                      ? Colors.green
+                                      : Colors.transparent
+                                  : cell.visited
+                                      ? cell.isGoal
+                                          ? Colors.green
+                                          : cell.isBackTracked
+                                              ? Colors.blue
+                                              : Color.fromRGBO(
+                                                  index, 0, index - 255, 1)
+                                      : Colors.transparent,
                               border: Border(
                                 bottom: cell.bottomWall ? border : noBorder,
                                 right: cell.rightWall ? border : noBorder,
@@ -191,17 +202,20 @@ class _MazeState extends State<Maze> {
                               //   left:  border ,
                               // ),
                             ),
-                            height: 1,
-                            width: 1,
-                            child: Center(
-                              child: Text(
-                                '(${cell.row},${cell.col})',
-                                style: GoogleFonts.orbitron(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
+                            // child: Center(
+                            //   child: Icon(Icons.circle,
+                            //       size: 5,
+                            //       color:),
+                            // ),
+                            // child: Center(
+                            //   child: Text(
+                            //     '(${cell.row},${cell.col})',
+                            //     style: GoogleFonts.montserrat(
+                            //       color: Colors.white,
+                            //       fontSize: 12,
+                            //     ),
+                            //   ),
+                            // ),
                             // child: const Icon(
                             //   Icons.fiber_manual_record,
                             //   color: Colors.purple,
@@ -214,7 +228,8 @@ class _MazeState extends State<Maze> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        _mazePainter.depthFirstSearch();
+                        _mazePainter.breathFirstSearch();
+                        //_mazePainter.depthFirstSearch();
                       });
                     },
                     icon: const Icon(
