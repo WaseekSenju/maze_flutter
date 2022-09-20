@@ -1,7 +1,6 @@
 # A very inefficient AlgoRunner :satisfied:
 
-![banner](https://user-images.githubusercontent.com/58625384/191169078-5de8c0cb-374c-461b-a72c-90699f4357b4.png)
-
+![banner](https://user-images.githubusercontent.com/58625384/191174388-73ca91fe-6d11-4af9-9cd4-2534a7c3466a.jpg)
 
 A simple visualization app that creates a maze and then uses Breadth First and Depth First and A star algorithm to solve the randomly generated maze from scratch.
 
