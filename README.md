@@ -10,9 +10,10 @@ One can understand the code and abstract working of the algorithm but it is real
 
 There are many algorithms that we can use to generate a random maze and the one I have used in my program is known as the recursive backtracking algorithm I used this one because it’s really easy to implement and it generates a Perfect maze i.e there is only one path from a particular start node to the end node.As you can see my Algorithm can only have “one’’ solution through the maze.
 Here is my code for the generation of the maze that is known as the recursive backtracking algorithm but in fact, it doesn’t use the recursion at all; the algorithm is iterative.
-[Algorithms: For generating maze a perfect maze](https://www.astrolog.org/labyrnth/algrithm.htm)
 
-```
+[Algorithms: For generating maze a perfect maze](https://www.astrolog.org/labyrnth/algrithm.htm) :paperclip:
+
+```dart
 void generateMaze() async {
     //---------Start the processing---------------------------------------------
     isProcessing = true;
