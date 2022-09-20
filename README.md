@@ -90,7 +90,6 @@ Let's take a look at a 3x3 maze
 At first, we will initialize it by setting the starting node as visited and putting it in the stack. So the maze representation will be like this:
 
 
-----:|:----
 ![image4](https://user-images.githubusercontent.com/58625384/191171081-4c8cd884-5554-49b7-9527-5295c7e92413.jpg)  <img width="100" alt="image3" src="https://user-images.githubusercontent.com/58625384/191171102-d99e89be-3826-4601-a38d-ea2d2e2a8d0c.png">
 
 # 3- Finding Path in the Maze
