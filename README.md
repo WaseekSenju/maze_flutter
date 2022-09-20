@@ -14,7 +14,10 @@ One can understand the code and abstract working of the algorithm but it is real
 There are many algorithms that we can use to generate a random maze and the one I have used in my program is known as the recursive backtracking algorithm I used this one because it’s really easy to implement and it generates a Perfect maze i.e there is only one path from a particular start node to the end node.As you can see my Algorithm can only have “one’’ solution through the maze.
 Here is my code for the generation of the maze that is known as the recursive backtracking algorithm but in fact, it doesn’t use the recursion at all; the algorithm is iterative.
 
+
 [Algorithms: For generating maze a perfect maze](https://www.astrolog.org/labyrnth/algrithm.htm) :paperclip:
+![](https://user-images.githubusercontent.com/58625384/191170650-c24e0350-f21d-45cf-9bab-057169d673c7.png)
+
 
 ```dart
 void generateMaze() async {
@@ -77,7 +80,20 @@ class CellNode {
   });
  ```
 
-So basically it selects the first node and randomly chooses any direction from the top, bottom, right, or left and removes the wall from the border of that square block that I have stated as CellNode and after that, it marks that CellNode as visited. So if the algorithm ever encounters the same node again it won’t move toward that particular node because it’s already been visited. It uses a stack to backtrack if such a situation is encountered. 
+
+So it selects the first node and randomly chooses any direction from the top, bottom, right, or left and removes the wall from the border of that square block that I have stated as CellNode and after that, it marks that CellNode as visited. So if the algorithm ever encounters the same node again it won’t move toward that particular node because it’s already been visited. It uses a stack to backtrack if such a situation is encountered. 
+
+Let's take a look at a 3x3 maze
+
+![image9](https://user-images.githubusercontent.com/58625384/191170911-034d8474-7cc6-4d26-8887-6f9aa6f05f59.png?raw=true)
+
+At first, we will initialize it by setting the starting node as visited and putting it in the stack. So the maze representation will be like this:
+
+
+Solarized dark             |  Solarized Ocean
+:---------------------
+----:|:-------------------------:
+![image4](https://user-images.githubusercontent.com/58625384/191171081-4c8cd884-5554-49b7-9527-5295c7e92413.jpg) |  <img width="300" alt="image3" src="https://user-images.githubusercontent.com/58625384/191171102-d99e89be-3826-4601-a38d-ea2d2e2a8d0c.png">
 
 # 3- Finding Path in the Maze
 Now I have demonstrated how you can generate a simple maze and represent that Data Structure visually in the form of a grid where each element of the grid is a Node that contains the data about the current state of the cell.
