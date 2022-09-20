@@ -1,6 +1,6 @@
 # A very inefficient AlgoRunner :satisfied:
 
-[](dev_waseek/images/banner.png?raw=true)
+[](images/banner.png?raw=true)
 
 A simple visualization app that creates a maze and then uses Breadth First and Depth First and A star algorithm to solve the randomly generated maze from scratch.
 
