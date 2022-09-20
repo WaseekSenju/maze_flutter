@@ -1,4 +1,4 @@
-# A very Ineffiecent AlgoRunner 
+# A very inefficient AlgoRunner :satisfied:
 
 A simple visualization app that creates a maze and then uses Breadth First and Depth First and A star algorithm to solve the randomly generated maze from scratch.
 
