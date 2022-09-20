@@ -1,6 +1,6 @@
 # A very inefficient AlgoRunner :satisfied:
 
-[](images/banner.png)
+[](https://github.com/WaseekSenju/maze_flutter/master/blob/master/images/banner.png)
 
 A simple visualization app that creates a maze and then uses Breadth First and Depth First and A star algorithm to solve the randomly generated maze from scratch.
 
