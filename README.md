@@ -92,6 +92,17 @@ At first, we will initialize it by setting the starting node as visited and putt
 
 ![image4](https://user-images.githubusercontent.com/58625384/191171081-4c8cd884-5554-49b7-9527-5295c7e92413.jpg)  <img width="100" alt="image3" src="https://user-images.githubusercontent.com/58625384/191171102-d99e89be-3826-4601-a38d-ea2d2e2a8d0c.png">
 
+After this, we will randomly select any direction from N, W, S, and E and then remove that direction's wall and push that cell on the top of the stack. The maze will look like this if we choose two moves in the West direction.  
+![image5](https://user-images.githubusercontent.com/58625384/191171455-d44db1bf-9e9f-4c4c-8f26-664b583477ce.jpg)
+
+After repeating the algorithm steps again we can get a random 3x3 maze every time using this simple algorithm.
+
+![image1](https://user-images.githubusercontent.com/58625384/191171829-7d9de4c9-626a-4632-a7c6-a061190aae4d.jpg)
+
+![image7](https://user-images.githubusercontent.com/58625384/191171864-836ea921-c637-4245-89c4-57d1a29e2630.png)
+![image6](https://user-images.githubusercontent.com/58625384/191171876-9adc55e3-308c-4a70-b480-b9b319e84a71.jpg)
+
+
 # 3- Finding Path in the Maze
 Now I have demonstrated how you can generate a simple maze and represent that Data Structure visually in the form of a grid where each element of the grid is a Node that contains the data about the current state of the cell.
 As our environment is Deterministic and we know how the world looks, we can use many simple paths finding algorithms to find paths from one node to another node. I have used Informed and Uninformed search Algos:
