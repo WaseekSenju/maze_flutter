@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'maze_painter.dart';
 import 'models/item.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -78,44 +79,27 @@ class Maze extends StatefulWidget {
 }
 
 class _MazeState extends State<Maze> {
-  double width = 1;
-  int crossAxixCount = 50;
-  bool _loaded = false;
-  late MazePainter _mazePainter;
+  double width = 2;
+  bool _loaded = true;
+  // final MazePainter _mazePainter = MazePainter(columns: 5, rows: 5);
 
   @override
   void initState() {
     super.initState();
-    setUp();
+    //setUp();
   }
 
-  void setUp() async {
-    final playerImage = await _itemToImage(widget.player);
-    final checkpoints = await Future.wait(
-        widget.checkpoints.map((c) async => await _itemToImage(c)));
-    final finishImage =
-        widget.finish != null ? await _itemToImage(widget.finish!) : null;
-
-    _mazePainter = MazePainter(
-      checkpointsImages: checkpoints,
-      columns: widget.columns,
-      finishImage: finishImage,
-      onCheckpoint: widget.onCheckpoint,
-      onFinish: widget.onFinish,
-      playerImage: playerImage,
-      rows: widget.rows,
-      wallColor: widget.wallColor ?? Colors.black,
-      wallThickness: widget.wallThickness ?? 4.0,
-    );
-    setState(() => _loaded = true);
-  }
+  // void setUp() async {
+  //   _mazePainter = MazePainter(
+  //     columns: widget.columns,
+  //     rows: widget.rows,
+  //   );
+  //   setState(() => _loaded = true);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    int row = 0;
-    int column = 0;
-    var rng = Random();
-    int itemCount = crossAxixCount * crossAxixCount;
+    final _mazePainter = Provider.of<MazePainter>(context, listen: false);
     BorderSide noBorder = BorderSide.none;
     BorderSide border = BorderSide(
       width: width,
@@ -161,115 +145,88 @@ class _MazeState extends State<Maze> {
                         itemCount: _mazePainter.cells.first.length *
                             _mazePainter.cells.first.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Cell cell = _mazePainter.cellList.elementAt(index);
-                          var color = '0xFF$index';
-                          // dev.log(
-                          //   '(${cell.row},${cell.col})',
-                          // );
-                          // dev.log(
-                          //   'N:${cell.topWall},W:${cell.leftWall},S:${cell.bottomWall},E:${cell.rightWall}',
-                          // );
-
-                          // var cell = _mazePainter.cells
-                          //     .elementAt(row)
-                          //     .elementAt(c olumn);
-
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: !_mazePainter.mazeSolved
-                                  ? cell.isGoal
-                                      ? Colors.green
-                                      : Colors.transparent
-                                  : cell.visited
+                          return Consumer<MazePainter>(
+                            builder: ((context, value, _) {
+                              Cell cell = value.cellList.elementAt(index);
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: !_mazePainter.mazeSolved
                                       ? cell.isGoal
                                           ? Colors.green
-                                          : cell.isBackTracked
-                                              ? Colors.blue
-                                              : Color.fromRGBO(
-                                                  index, 0, index - 255, 1)
-                                      : Colors.transparent,
-                              border: Border(
-                                bottom: cell.bottomWall ? border : noBorder,
-                                right: cell.rightWall ? border : noBorder,
-                                top: cell.topWall ? border : noBorder,
-                                left: cell.leftWall ? border : noBorder,
-                              ),
+                                          : Colors.transparent
+                                      : cell.visited
+                                          ? cell.isGoal
+                                              ? Colors.green
+                                              : cell.isBackTracked
+                                                  ? Colors.blue
+                                                  : Color.fromRGBO(
+                                                      index, 0, index - 255, 1)
+                                          : Colors.transparent,
+                                  border: Border(
+                                    bottom: cell.bottomWall ? border : noBorder,
+                                    right: cell.rightWall ? border : noBorder,
+                                    top: cell.topWall ? border : noBorder,
+                                    left: cell.leftWall ? border : noBorder,
+                                  ),
 
-                              // Border(
-                              //   bottom:  border ,
-                              //   right:  border ,
-                              //   top: border ,
-                              //   left:  border ,
-                              // ),
-                            ),
-                            // child: Center(
-                            //   child: Icon(Icons.circle,
-                            //       size: 5,
-                            //       color:),
-                            // ),
-                            // child: Center(
-                            //   child: Text(
-                            //     '(${cell.row},${cell.col})',
-                            //     style: GoogleFonts.montserrat(
-                            //       color: Colors.white,
-                            //       fontSize: 12,
-                            //     ),
-                            //   ),
-                            // ),
-                            // child: const Icon(
-                            //   Icons.fiber_manual_record,
-                            //   color: Colors.purple,
-                            //   size: 5,
-                            // ),
+                                  // Border(
+                                  //   bottom:  border ,
+                                  //   right:  border ,
+                                  //   top: border ,
+                                  //   left:  border ,
+                                  // ),
+                                ),
+                                // child: Center(
+                                //   child: Icon(Icons.circle,
+                                //       size: 5,
+                                //       color:),
+                                // ),
+                                // child: Center(
+                                //   child: Text(
+                                //     '(${cell.row},${cell.col})',
+                                //     style: GoogleFonts.montserrat(
+                                //       color: Colors.white,
+                                //       fontSize: 12,
+                                //     ),
+                                //   ),
+                                // ),
+                                // child: const Icon(
+                                //   Icons.fiber_manual_record,
+                                //   color: Colors.purple,
+                                //   size: 5,
+                                // ),
+                              );
+                            }),
                           );
                         }),
                   ),
-
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _mazePainter.breathFirstSearch();
-                        //_mazePainter.depthFirstSearch();
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.add_circle,
-                      color: Colors.purple,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _mazePainter.createMaze();
+                          //_mazePainter.depthFirstSearch();
+                        },
+                        icon: const Icon(
+                          Icons.new_label,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _mazePainter.breathFirstSearch();
+                            //_mazePainter.depthFirstSearch();
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.play_arrow,
+                          color: Colors.purple,
+                        ),
+                      ),
+                    ],
                   ),
-
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     IconButton(
-                  //         onPressed: () {
-                  //           setState(() {
-                  //             crossAxixCount++;
-                  //           });
-                  //         },
-                  //         icon: const Icon(
-                  //           Icons.add_circle,
-                  //           color: Colors.purple,
-                  //         )),
-                  //     Text(
-                  //       '$crossAxixCount',
-                  //       style: GoogleFonts.orbitron(
-                  //         fontWeight: FontWeight.bold,
-                  //         color: Colors.purple,
-                  //         fontSize: 15,
-                  //       ),
-                  //     ),
-                  //     IconButton(
-                  //       onPressed: () {
-                  //         setState(() {
-                  //           crossAxixCount--;
-                  //         });
-                  //       },
-                  //       icon: const Icon(Icons.remove_circle),
-                  //       color: Colors.purple,
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),

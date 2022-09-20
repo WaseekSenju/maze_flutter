@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maze_flutter/maze_widget.dart';
+import 'package:provider/provider.dart';
+import './maze_painter.dart';
 
 import 'models/item.dart';
 
@@ -15,7 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MazePainter(rows: 5, columns: 5)),
+      ],
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -23,6 +29,8 @@ class MyApp extends StatelessWidget {
         ),
         home: Maze(
           player: MazeItem('assets/player.png', ImageType.asset),
-        ));
+        ),
+      ),
+    );
   }
 }

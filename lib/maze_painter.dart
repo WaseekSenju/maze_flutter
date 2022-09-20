@@ -25,66 +25,24 @@ enum Direction {
 ///Maze Painter
 ///
 ///Draws the maze based on params
-class MazePainter {
+class MazePainter with ChangeNotifier {
   ///Default constructor
   MazePainter({
-    required this.playerImage,
-    this.checkpointsImages = const [],
-    this.columns = 7,
-    this.finishImage,
-    this.onCheckpoint,
-    this.onFinish,
-    this.rows = 10,
-    this.wallColor = Colors.black,
-    this.wallThickness = 4.0,
-  }) {
-    _checkpoints = List.from(checkpointsImages);
-    _checkpointsPositions = _checkpoints
-        .map((i) => ItemPosition(
-            col: _randomizer.nextInt(columns), row: _randomizer.nextInt(rows)))
-        .toList();
+    required this.columns,
+    required this.rows,
+  });
 
-    _createMaze();
-  }
-
-  ///Images for checkpoints
-  final List<ui.Image> checkpointsImages;
-
-  ///Number of collums
+  ///Number of collums and rows
   final int columns;
-
-  ///Image for player
-  final ui.Image? finishImage;
-
-  ///Callback when the player reach a checkpoint
-  final Function(int)? onCheckpoint;
-
-  ///Callback when the player reach the finish
-  final Function? onFinish;
-
-  ///Image for player
-  final ui.Image playerImage;
-
-  ///Number of rows
   final int rows;
 
-  ///Color of the walls
-  Color wallColor;
-
-  final List<Cell> cellList = [];
+  //Single List 
+  late final List<Cell> cellList = List.generate((rows * columns), (r) => Cell(0, 0));
+  
+  // Adjacency List 
+  late List<List<Cell>> cells =
+      List.generate(rows, (r) => List.generate(columns, (c) => Cell(r, c)));
   final List<Cell> path = [];
-
-  ///Size of the walls
-  final double wallThickness;
-
-  ///Private attributes
-  late Cell _player, _exit;
-  late List<ItemPosition> _checkpointsPositions;
-  late List<List<Cell>> cells;
-  late List<ui.Image> _checkpoints;
-  late double _cellSize, _hMargin, _vMargin;
-
-  ///Paints for `exit`, `player` and `walls`
 
   ///Randomizer for positions and walls distribution
   final Random _randomizer = Random();
@@ -94,13 +52,13 @@ class MazePainter {
   bool mazeSolved = false;
 
   ///This method initialize the maze by randomizing what wall will be disable
-  void _createMaze() {
+  void createMaze() async {
     var stack = Stack<Cell>();
     Cell current;
     Cell? next;
 
-    cells =
-        List.generate(rows, (r) => List.generate(columns, (c) => Cell(r, c)));
+    // cells =
+    //     List.generate(rows, (r) => List.generate(columns, (c) => Cell(r, c)));
 
     //------------ For Random Goals Node
     //goalx = _randomizer.nextInt(rows);
@@ -109,16 +67,17 @@ class MazePainter {
 
     cells.last.last.isGoal = true;
 
-    _player = cells.first.first;
-    _exit = cells.last.last;
-
     current = cells.first.first..visited = true;
 
     //Recursive BackTracking Alog
     do {
       next = _getNext(current);
       if (next != null) {
+        await Future.delayed(
+          const Duration(milliseconds: 100),
+        );
         _removeWall(current, next);
+        notifyListeners();
         stack.push(current);
         current = next..visited = true;
       } else {
@@ -129,6 +88,7 @@ class MazePainter {
     for (var i = 0; i < cells.length; i++) {
       for (var j = 0; j < cells[i].length; j++) {
         cellList.add(cells[i][j]);
+
         // dev.log(
         //   '(${cells[i][j].row},${cells[i][j].col})',
         // );
@@ -367,12 +327,12 @@ class MazePainter {
     }
   }
 
-  ItemPosition? _getItemPosition(int col, int row) {
-    try {
-      return _checkpointsPositions.singleWhere(
-          (element) => element == ItemPosition(col: col, row: row));
-    } catch (e) {
-      return null;
-    }
-  }
+  // ItemPosition? _getItemPosition(int col, int row) {
+  //   try {
+  //     return _checkpointsPositions.singleWhere(
+  //         (element) => element == ItemPosition(col: col, row: row));
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 }
