@@ -97,10 +97,11 @@ After this, we will randomly select any direction from N, W, S, and E and then r
 
 After repeating the algorithm steps again we can get a random 3x3 maze every time using this simple algorithm.
 
-![image1](https://user-images.githubusercontent.com/58625384/191171829-7d9de4c9-626a-4632-a7c6-a061190aae4d.jpg)
-
-![image7](https://user-images.githubusercontent.com/58625384/191171864-836ea921-c637-4245-89c4-57d1a29e2630.png)
-![image6](https://user-images.githubusercontent.com/58625384/191171876-9adc55e3-308c-4a70-b480-b9b319e84a71.jpg)
+<p float="left">
+  <img src="(https://user-images.githubusercontent.com/58625384/191171829-7d9de4c9-626a-4632-a7c6-a061190aae4d.jpg" width="100" />
+  <img src="https://user-images.githubusercontent.com/58625384/191171864-836ea921-c637-4245-89c4-57d1a29e2630.png" width="100" /> 
+  <img src="[/img3.png](https://user-images.githubusercontent.com/58625384/191171876-9adc55e3-308c-4a70-b480-b9b319e84a71.jpg)" width="100" />
+</p>
 
 
 # 3- Finding Path in the Maze
